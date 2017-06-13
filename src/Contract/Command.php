@@ -1,6 +1,6 @@
 <?php
 
-namespace Per3evere\Preq\Contracts;
+namespace Per3evere\Preq\Contract;
 
 /**
  * Interface Command

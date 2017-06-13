@@ -2,7 +2,7 @@
 
 namespace Per3evere\Preq;
 
-use Per3evere\Preq\Contracts\Command as CommandContract;
+use Per3evere\Preq\Contract\Command as CommandContract;
 
 /**
  * Class AbstractCommand
