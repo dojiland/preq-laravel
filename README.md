@@ -4,13 +4,32 @@
 
 Encapsulate communication of services.
 
+**!!! Currently in beta and should not be used in production.**
+
 ## Installation
 
-```javascript
-"require": {
-    "per3evere/preq": "^0.1.0@dev"
-}
+Require this package with composer:
+
 ```
+composer require per3evere/preq --dev
+```
+
+Add ServiceProvider
+
+### Laravel
+
+add this to the providers array in `config/app.php`
+```php
+Per3evere\Preq\PreqServiceProvider::class
+```
+
+### Lumen
+
+add this in `bootstrap/app.php`
+```php
+$app->register(Per3evere\Preq\PreqServiceProvider::class);
+```
+
 
 ## Usage
 
