@@ -30,7 +30,7 @@ class PreqServiceProvider extends ServiceProvider
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('preq.php')]);
-        } elseif ($this->app insteadof LumenApplication) {
+        } elseif ($this->app instanceof LumenApplication) {
             $this->app->configure('preq');
         }
 
