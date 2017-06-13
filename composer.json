@@ -1,0 +1,29 @@
+{
+    "name": "per3evere/preq",
+    "description": "Microservices IPC command factory for Laravel && Lumen",
+    "license": "MIT",
+    "keywords": [
+        "microservices", "ipc", "laravel"
+    ],
+    "authors": [
+        {
+            "name": "Persevere Von",
+            "email": "wu543065657@163.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Per3evere\\Preq\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Per3evere\\Preq\\PreqServiceProvider"
+            ]
+        }
+    }
+}
