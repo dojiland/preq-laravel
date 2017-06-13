@@ -4,7 +4,7 @@
 
 Encapsulate communication of services.
 
-**!!! Currently in beta and should not be used in production.**
+**!!! At this time the package is still in developmental stage and should not be used in production.**
 
 ## Installation
 
