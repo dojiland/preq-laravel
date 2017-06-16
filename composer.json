@@ -27,7 +27,7 @@
             "Per3evere\\Preq\\": "src/"
         }
     },
-    "autoload": {
+    "autoload-dev": {
         "psr-4": {
             "Per3evere\\Preq\\Test\\": "tests/"
         }
