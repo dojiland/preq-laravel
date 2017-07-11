@@ -47,9 +47,9 @@ class Example extends AbstractCommand
      *
      * @return void
      */
-    public function execute()
+    public function run()
     {
-        return 'executed!';
+        return 'run!';
     }
 }
 ```
