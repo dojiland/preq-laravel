@@ -8,5 +8,5 @@ namespace Per3evere\Preq\Contract;
  */
 interface Command
 {
-    public function execute();
+    public function run();
 }
