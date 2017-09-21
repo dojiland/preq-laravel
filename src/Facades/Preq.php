@@ -1,6 +1,6 @@
 <?php
 
-namespace Per3evere\Preq;
+namespace Per3evere\Preq\Facades;
 
 class Facade extends \Illuminate\Support\Facades\Facade
 {
