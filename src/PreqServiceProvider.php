@@ -47,7 +47,15 @@ class PreqServiceProvider extends ServiceProvider
         $this->app->singleton('preq', function ($app) {
             $config = $app->make('config')->get('preq');
 
-            return new CommandFactory($config);
+            $stateStorage = app(IlluminateStateStorage::class);
+
+            return new CommandFactory(
+                $config,
+                new CircuitBreakerFactory($stateStorage),
+                new CommandMetricsFactory($stateStorage),
+                new RequestCache(),
+                new RequestLog()
+            );
         });
     }
 
