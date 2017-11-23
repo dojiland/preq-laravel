@@ -49,7 +49,7 @@ class CircuitBreaker implements CircuitBreakerContract
     }
 
     /**
-     * 熔断器是否开启.
+     * 熔断器是否打开. 打开表示不能运行请求
      *
      * @return boolean
      */

@@ -2,6 +2,8 @@
 
 namespace Per3evere\Preq\Exceptions;
 
+use Throwable;
+
 class RuntimeException extends \RuntimeException
 {
     /**

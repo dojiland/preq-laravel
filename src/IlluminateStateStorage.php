@@ -108,7 +108,7 @@ class IlluminateStateStorage implements StateStorageContract
     }
 
     /**
-     * 判断熔断器是否开启
+     * 判断熔断器是否打开
      *
      * @return void
      */

@@ -7,6 +7,7 @@ use Per3evere\Preq\Exceptions\FallbackNotAvailableException;
 use Per3evere\Preq\Exceptions\BadRequestException;
 use Per3evere\Preq\Contract\Command as CommandContract;
 use Illuminate\Support\Arr;
+use Throwable;
 
 abstract class AbstractCommand implements CommandContract
 {
@@ -234,6 +235,7 @@ abstract class AbstractCommand implements CommandContract
             $metrics->markFailure();
             $this->executionException = $e;
             $this->recordExecutionEvent(self::EVENT_FAILURE);
+            $result = $this->getFallbackOrThrowException($e);
         }
 
         if ($cacheEnabled) {
