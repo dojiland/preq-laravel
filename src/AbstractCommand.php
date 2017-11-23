@@ -308,7 +308,7 @@ abstract class AbstractCommand implements CommandContract
         try {
             if (Arr::get($this->config, 'fallback.enabled')) {
                 try {
-                    $executionResult = $this->getFallback();
+                    $executionResult = $this->getFallback($originalException);
                     $metrics->markFallbackSuccess();
                     $this->recordExecutionEvent(self::EVENT_FALLBACK_SUCCESS);
                     return $executionResult;
@@ -347,7 +347,7 @@ abstract class AbstractCommand implements CommandContract
      *
      * @return void
      */
-    protected function getFallback()
+    protected function getFallback(Throwable $e)
     {
         throw new FallbackNotAvailableException('No fallback available');
     }
