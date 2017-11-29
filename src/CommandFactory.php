@@ -87,4 +87,14 @@ class CommandFactory
 
         return $command;
     }
+
+    /**
+     * 获取请求日志.
+     *
+     * @return void
+     */
+    public function getRequestLog()
+    {
+        return $this->requestLog;
+    }
 }

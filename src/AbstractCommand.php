@@ -8,6 +8,7 @@ use Per3evere\Preq\Exceptions\BadRequestException;
 use Per3evere\Preq\Contract\Command as CommandContract;
 use Illuminate\Support\Arr;
 use Throwable;
+use GuzzleHttp\Promise\PromiseInterface;
 
 abstract class AbstractCommand implements CommandContract
 {
@@ -132,16 +133,6 @@ abstract class AbstractCommand implements CommandContract
     }
 
     /**
-     * 获取请求日志.
-     *
-     * @return void
-     */
-    public function getRequestLog()
-    {
-        return $this->requestLog;
-    }
-
-    /**
      * 初始化配置.
      */
     public function initializeConfig(array $config = [])
@@ -189,7 +180,7 @@ abstract class AbstractCommand implements CommandContract
 
 
     /**
-     * 执行命令
+     * 执行命令，同步
      * 加入处理逻辑.
      *
      * @return mixed
@@ -244,6 +235,68 @@ abstract class AbstractCommand implements CommandContract
 
         return $result;
     }
+
+    /**
+     * 异步执行命令.
+     *
+     * @return mixed
+     */
+    public function queue()
+    {
+        $this->prepare();
+        $metrics = $this->getMetrics();
+        $cacheEnabled = $this->isRequestCacheEnabled();
+
+        $this->recordExecutedCommand();
+
+        if ($cacheEnabled) {
+            $cacheHit = $this->requestCache->exists($this->getCommandKey(), $this->getCacheKey());
+
+            if ($cacheHit) {
+                $metrics->markResponseFromCache();
+                $this->recordExecutionEvent(self::EVENT_RESPONSE_FROM_CACHE);
+                return $this->requestCache->get($this->getCommandKey(), $this->getCommandKey());
+            }
+        }
+
+        $circuitBreaker = $this->getCircuitBreaker();
+
+        if (! $circuitBreaker->allowRequest()) {
+            $metrics->markShortCircuited();
+            $this->recordExecutionEvent(self::EVENT_SHORT_CIRCUITED);
+            return $this->getFallbackOrThrowException();
+        }
+
+        $this->invocationStartTime = $this->getTimeInMilliseconds();
+
+        $promise = $this->runAsync();
+
+        if ($promise instanceof PromiseInterface) {
+            $promise->then(
+                function ($value) use ($metrics, $circuitBreaker) {
+                    $this->recordExecutionTime();
+                    $metrics->markSuccess();
+                    $circuitBreaker->markSuccess();
+                    $this->recordExecutionEvent(self::EVENT_SUCCESS);
+                },
+                function ($reason) use ($metrics) {
+                    $this->recordExecutionTime();
+
+                    if ($reason instanceof BadRequestException) {
+                        throw $reason;
+                    }
+
+                    $metrics->markFailure();
+                    $this->executionException = $reason;
+                    $this->recordExecutionEvent(self::EVENT_FAILURE);
+                    return Promise\promise_for($this->getFallbackOrThrowException($reason));
+                }
+            );
+
+            return $promise;
+        }
+    }
+
 
     /**
      * 执行命令前置操作.

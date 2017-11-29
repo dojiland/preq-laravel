@@ -4,8 +4,6 @@
 
 Encapsulate communication of services.
 
-**!!! At this time the package is still in developmental stage and should not be used in production.**
-
 ## Installation
 
 Require this package with composer:
@@ -43,13 +41,23 @@ use Per3evere\Preq\AbstractCommand;
 class Example extends AbstractCommand
 {
     /**
-     * 执行命令
+     * 同步执行命令.
      *
      * @return void
      */
     public function run()
     {
         return 'run!';
+    }
+
+    /**
+     * 异步执行命令.
+     *
+     * @return \Guzzlehttp\Promise\Promise;
+     */
+    public function runAsync()
+    {
+        // 返回注意返回类型.
     }
 }
 ```
@@ -58,6 +66,11 @@ execute it
 
 ```php
 $command = app('preq')->getCommand(\App\Services\Example::class);
+
+// 同步执行命令
 echo $command->execute();
+
+// 异步执行命令
+$command->queue();
 ```
 
