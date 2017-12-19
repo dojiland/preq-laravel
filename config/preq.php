@@ -28,7 +28,7 @@ return [
             // This is for caching metrics so they are not recalculated more often than needed
             'healthSnapshotIntervalInMilliseconds' => 1000,
             // The period of time within which we the stats are collected
-            'rollingStatisticalWindowInMilliseconds' => 1000,
+            'rollingStatisticalWindowInMilliseconds' => 10000,
             // The more buckets the more precise and actual the stats and slower the calculation.
             'rollingStatisticalWindowBuckets' => 10,
         ),
