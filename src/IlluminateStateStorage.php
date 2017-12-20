@@ -23,31 +23,13 @@ class IlluminateStateStorage implements StateStorageContract
     protected $cache;
 
     /**
-     * 原缓存 prefix.
-     *
-     * @var string
-     */
-    private $originPrefix;
-
-    /**
      * @var string
      */
     protected $tag = 'preq';
 
     public function __construct(CacheContract $cache)
     {
-        $this->cache = $cache;
-        $this->originPrefix = $cache->getPrefix();
-    }
-
-    /**
-     * 恢复原始缓存前缀.
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->cache->setPrefix($this->originPrefix);
+        $this->cache = clone $cache;
     }
 
     protected function prefix($name)
