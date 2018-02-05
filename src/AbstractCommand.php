@@ -9,6 +9,7 @@ use Per3evere\Preq\Contract\Command as CommandContract;
 use Illuminate\Support\Arr;
 use Throwable;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Promise\promise_for;
 
 abstract class AbstractCommand implements CommandContract
 {
@@ -289,7 +290,7 @@ abstract class AbstractCommand implements CommandContract
                     $metrics->markFailure();
                     $this->executionException = $reason;
                     $this->recordExecutionEvent(self::EVENT_FAILURE);
-                    return Promise\promise_for($this->getFallbackOrThrowException($reason));
+                    return promise_for($this->getFallbackOrThrowException($reason));
                 }
             );
 
