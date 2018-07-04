@@ -104,7 +104,7 @@ class IlluminateStateStorage implements StateStorageContract
 
         $sleepingWindowInSeconds = ceil($sleepingWindowInMilliseconds / 1000);
 
-        return (boolean) $this->add($singleTestFlagKey, true, $sleepingWindowInSeconds / 60);
+        return (boolean) $this->cache->add($singleTestFlagKey, true, $sleepingWindowInSeconds / 60);
     }
 
     /**
