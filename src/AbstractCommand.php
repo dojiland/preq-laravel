@@ -10,6 +10,7 @@ use Illuminate\Support\Arr;
 use Throwable;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Exception\ClientException;
 
 abstract class AbstractCommand implements CommandContract
 {
@@ -224,8 +225,10 @@ abstract class AbstractCommand implements CommandContract
             throw $e;
         } catch (Throwable $e) {
             $this->recordExecutionTime();
-            $metrics->markFailure();
             $this->executionException = $e;
+            if (!($e instanceof ClientException)) {
+                $metrics->markFailure();
+            }
             $this->recordExecutionEvent(self::EVENT_FAILURE);
             $result = $this->getFallbackOrThrowException($e);
         }
@@ -287,7 +290,10 @@ abstract class AbstractCommand implements CommandContract
                         throw $reason;
                     }
 
-                    $metrics->markFailure();
+                    if (!($reason instanceof ClientException)) {
+                        $metrics->markFailure();
+                    }
+
                     $this->executionException = $reason;
                     $this->recordExecutionEvent(self::EVENT_FAILURE);
                     return promise_for($this->getFallbackOrThrowException($reason));
