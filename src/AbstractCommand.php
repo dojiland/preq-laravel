@@ -4,6 +4,8 @@ namespace Per3evere\Preq;
 
 use Per3evere\Preq\Exceptions\RuntimeException;
 use Per3evere\Preq\Exceptions\FallbackNotAvailableException;
+use Per3evere\Preq\Exceptions\CircuitBreakException;
+use Per3evere\Preq\Exceptions\AsyncCircuitBreakException;
 use Per3evere\Preq\Exceptions\BadRequestException;
 use Per3evere\Preq\Contract\Command as CommandContract;
 use Illuminate\Support\Arr;
@@ -210,7 +212,7 @@ abstract class AbstractCommand implements CommandContract
         if (! $circuitBreaker->allowRequest()) {
             $metrics->markShortCircuited();
             $this->recordExecutionEvent(self::EVENT_SHORT_CIRCUITED);
-            return $this->getFallbackOrThrowException();
+            return $this->getFallbackOrThrowException(new CircuitBreakException('Short-circuited'));
         }
 
         $this->invocationStartTime = $this->getTimeInMilliseconds();
@@ -268,7 +270,7 @@ abstract class AbstractCommand implements CommandContract
         if (! $circuitBreaker->allowRequest()) {
             $metrics->markShortCircuited();
             $this->recordExecutionEvent(self::EVENT_SHORT_CIRCUITED);
-            return $this->getFallbackOrThrowException();
+            return $this->getFallbackOrThrowException(new AsyncCircuitBreakException('Short-circuited'));
         }
 
         $this->invocationStartTime = $this->getTimeInMilliseconds();
@@ -450,7 +452,7 @@ abstract class AbstractCommand implements CommandContract
     /**
      * 返回命令执行期间抛出的异常.
      *
-     * @return void
+     * @return Exception|null
      */
     public function getExecutionException()
     {
@@ -460,7 +462,7 @@ abstract class AbstractCommand implements CommandContract
     /**
      * 获取当前服务时间，单位毫秒.
      *
-     * @return void
+     * @return float
      */
     private function getTimeInMilliseconds()
     {
