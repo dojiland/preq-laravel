@@ -2,7 +2,7 @@
 
 ## About Preq
 
-Encapsulate communication of services.
+Preq is a latency and fault tolerance library for Laravel && Lumen, inspired by Netflix’s Hystrix and [upwork/phystrix](https://github.com/upwork/phystrix)
 
 ## Installation
 
