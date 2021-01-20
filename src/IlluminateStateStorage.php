@@ -34,6 +34,9 @@ class IlluminateStateStorage implements StateStorageContract
 
     protected function prefix($name)
     {
+        if (method_exists($this->cache, 'setPrefix')) {
+            $this->cache->setPrefix('');
+        }
         return self::CACHE_PREFIX . '_' . $name;
     }
 
