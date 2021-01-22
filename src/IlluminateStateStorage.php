@@ -34,7 +34,9 @@ class IlluminateStateStorage implements StateStorageContract
 
     protected function prefix($name)
     {
-        $this->cache->setPrefix('');
+        if (method_exists($this->cache, 'setPrefix')) {
+            $this->cache->setPrefix('');
+        }
         return self::CACHE_PREFIX . '_' . $name;
     }
 
@@ -87,7 +89,7 @@ class IlluminateStateStorage implements StateStorageContract
         $openedKey = $this->prefix($commandKey . self::OPENED_NAME);
         $singleTestFlagKey = $this->prefix($commandKey . self::SINGLE_TEST_BLOCKED);
 
-        $this->cache->put($openedKey, true);
+        $this->cache->put($openedKey, true, 60);
 
         $sleepingWindowInSeconds = ceil($sleepingWindowInMilliseconds / 1000);
         $this->cache->add($singleTestFlagKey, true, $sleepingWindowInSeconds / 60);
@@ -128,6 +130,6 @@ class IlluminateStateStorage implements StateStorageContract
     {
         $openedKey = $this->prefix($commandKey . self::OPENED_NAME);
 
-        $this->cache->put($openedKey, false);
+        $this->cache->delete($openedKey);
     }
 }

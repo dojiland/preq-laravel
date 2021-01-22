@@ -203,7 +203,7 @@ abstract class AbstractCommand implements CommandContract
             if ($cacheHit) {
                 $metrics->markResponseFromCache();
                 $this->recordExecutionEvent(self::EVENT_RESPONSE_FROM_CACHE);
-                return $this->requestCache->get($this->getCommandKey(), $this->getCommandKey());
+                return $this->requestCache->get($this->getCommandKey(), $this->getCacheKey());
             }
         }
 
@@ -444,7 +444,7 @@ abstract class AbstractCommand implements CommandContract
      *
      * @return null|int
      */
-    public function getExecutionTimeInmilliseconds()
+    public function getExecutionTimeInMilliseconds()
     {
         return $this->executionTime;
     }
