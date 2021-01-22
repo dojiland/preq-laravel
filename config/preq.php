@@ -23,6 +23,9 @@ return [
             // For how long to wait before attempting to access a failing service
             // 在尝试请求一个失败的服务时的等待时间，单位毫秒
             'sleepWindowInMilliseconds' => 5000,
+            // For how long to close circuitBreaker after circuitBreaker opening
+            // 熔断启动该时间后，会自动关闭熔断
+            'closeCircuitBreakerInMinutes'  => 10,
         ),
         'metrics' => array(
             // This is for caching metrics so they are not recalculated more often than needed
