@@ -7,7 +7,7 @@ use Per3evere\Preq\Contract\StateStorage as StateStorageContract;
 
 class IlluminateStateStorage implements StateStorageContract
 {
-    const BUCKET_EXPIRE_MINUTES = 2;
+    const BUCKET_EXPIRE_SECONDS = 120;
 
     const CACHE_PREFIX = 'preq';
 
@@ -34,7 +34,9 @@ class IlluminateStateStorage implements StateStorageContract
 
     protected function prefix($name)
     {
-        $this->cache->setPrefix('');
+        if (method_exists($this->cache, 'setPrefix')) {
+            $this->cache->setPrefix('');
+        }
         return self::CACHE_PREFIX . '_' . $name;
     }
 
@@ -58,7 +60,7 @@ class IlluminateStateStorage implements StateStorageContract
     {
         $bucketName = $this->prefix($commandKey . '_' . $type . '_' . $index);
 
-        if (! $this->cache->add($bucketName, 1, self::BUCKET_EXPIRE_MINUTES)) {
+        if (! $this->cache->add($bucketName, 1, self::BUCKET_EXPIRE_SECONDS)) {
             $this->cache->increment($bucketName);
         }
     }
@@ -73,7 +75,7 @@ class IlluminateStateStorage implements StateStorageContract
         $bucketName = $this->prefix($commandKey . '_' . $type . '_' . $index);
 
         if ($this->cache->has($bucketName)) {
-            $this->cache->put($bucketName, 0, self::BUCKET_EXPIRE_MINUTES);
+            $this->cache->put($bucketName, 0, self::BUCKET_EXPIRE_SECONDS);
         }
     }
 
@@ -90,7 +92,7 @@ class IlluminateStateStorage implements StateStorageContract
         $this->cache->put($openedKey, true);
 
         $sleepingWindowInSeconds = ceil($sleepingWindowInMilliseconds / 1000);
-        $this->cache->add($singleTestFlagKey, true, $sleepingWindowInSeconds / 60);
+        $this->cache->add($singleTestFlagKey, true, $sleepingWindowInSeconds);
     }
 
     /**
@@ -104,7 +106,7 @@ class IlluminateStateStorage implements StateStorageContract
 
         $sleepingWindowInSeconds = ceil($sleepingWindowInMilliseconds / 1000);
 
-        return (boolean) $this->cache->add($singleTestFlagKey, true, $sleepingWindowInSeconds / 60);
+        return (boolean) $this->cache->add($singleTestFlagKey, true, $sleepingWindowInSeconds);
     }
 
     /**

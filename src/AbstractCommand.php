@@ -11,7 +11,7 @@ use Per3evere\Preq\Contract\Command as CommandContract;
 use Illuminate\Support\Arr;
 use Throwable;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Exception\ClientException;
 
 abstract class AbstractCommand implements CommandContract
@@ -298,7 +298,7 @@ abstract class AbstractCommand implements CommandContract
 
                     $this->executionException = $reason;
                     $this->recordExecutionEvent(self::EVENT_FAILURE);
-                    return promise_for($this->getFallbackOrThrowException($reason));
+                    return Create::promiseFor($this->getFallbackOrThrowException($reason));
                 }
             );
 
