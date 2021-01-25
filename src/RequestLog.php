@@ -64,7 +64,7 @@ class RequestLog
             }
             $aggregatedCommandsExecuted[$outputForExecutedCommand] = $aggregatedCommandsExecuted[$outputForExecutedCommand] + 1;
             $executionTime = $executedCommand->getExecutionTimeInMilliseconds();
-            if ($executionTime < 0) {
+            if (empty($executionTime) || $executionTime < 0) {
                 $executionTime = 0;
             }
             if (isset($aggregatedCommandExecutionTime[$outputForExecutedCommand]) && $executionTime > 0) {

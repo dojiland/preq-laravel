@@ -84,12 +84,12 @@ class IlluminateStateStorage implements StateStorageContract
      *
      * @return void
      */
-    public function openCircuit($commandKey, $sleepingWindowInMilliseconds)
+    public function openCircuit($commandKey, $sleepingWindowInMilliseconds, $closeCircuitBreakerInSeconds)
     {
         $openedKey = $this->prefix($commandKey . self::OPENED_NAME);
         $singleTestFlagKey = $this->prefix($commandKey . self::SINGLE_TEST_BLOCKED);
 
-        $this->cache->put($openedKey, true);
+        $this->cache->put($openedKey, true, $closeCircuitBreakerInSeconds);
 
         $sleepingWindowInSeconds = ceil($sleepingWindowInMilliseconds / 1000);
         $this->cache->add($singleTestFlagKey, true, $sleepingWindowInSeconds);
@@ -130,6 +130,6 @@ class IlluminateStateStorage implements StateStorageContract
     {
         $openedKey = $this->prefix($commandKey . self::OPENED_NAME);
 
-        $this->cache->put($openedKey, false);
+        $this->cache->delete($openedKey);
     }
 }
