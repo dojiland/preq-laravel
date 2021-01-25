@@ -8,7 +8,7 @@ interface StateStorage
 
     public function getBucket($commandKey, $type, $index);
 
-    public function openCircuit($commandKey, $sleepingWindowInMilliseconds, $closeCircuitBreakerInMinutes);
+    public function openCircuit($commandKey, $sleepingWindowInMilliseconds, $closeCircuitBreakerInSeconds);
 
     public function closeCircuit($commandKey);
 
