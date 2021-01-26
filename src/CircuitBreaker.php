@@ -72,7 +72,8 @@ class CircuitBreaker implements CircuitBreakerContract
         } else {
             $this->stateStorage->openCircuit(
                 $this->commandKey,
-                Arr::get($this->config, 'circuitBreaker.sleepWindowInMilliseconds')
+                Arr::get($this->config, 'circuitBreaker.sleepWindowInMilliseconds'),
+                Arr::get($this->config, 'circuitBreaker.closeCircuitBreakerInSeconds'),
             );
             return true;
         }
