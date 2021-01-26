@@ -49,7 +49,7 @@ class CommandTest extends TestCase
         }
         $this->config = $config;
 
-        $dir = __DIR__.'/cache';
+        $dir = __DIR__.'/cache'.rand(100, 999);
         if (is_dir($dir)) {
             $this->deleteDir($dir);
         }
